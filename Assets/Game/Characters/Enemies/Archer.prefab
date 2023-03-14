@@ -19,6 +19,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Archer
       objectReference: {fileID: 0}
+    - target: {fileID: 8385996500594748195, guid: 6f7028e85c2764846af47f8edc81cef2, type: 3}
+      propertyPath: _characterClass
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8521118137184300122, guid: 6f7028e85c2764846af47f8edc81cef2, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -65,6 +69,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9169821743728189786, guid: 6f7028e85c2764846af47f8edc81cef2, type: 3}
       propertyPath: _defaultWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 2fa2730ef0411e740baf2346b2168b28, type: 2}
+    - target: {fileID: 9169821743728189786, guid: 6f7028e85c2764846af47f8edc81cef2, type: 3}
+      propertyPath: _defaultWeaponConfig
       value: 
       objectReference: {fileID: 11400000, guid: 2fa2730ef0411e740baf2346b2168b28, type: 2}
     m_RemovedComponents: []

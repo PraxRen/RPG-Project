@@ -90,6 +90,10 @@ PrefabInstance:
       propertyPath: uniqueIdentifier
       value: player
       objectReference: {fileID: 0}
+    - target: {fileID: 1813104343797366258, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7131725728260582273, guid: 8d528b37540242941ac78fa03738537b, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -104,7 +108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7254015682933358101, guid: 8d528b37540242941ac78fa03738537b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.064
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7254015682933358101, guid: 8d528b37540242941ac78fa03738537b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -138,6 +142,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7389118888795355500, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _startingLevel
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7389118888795355500, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _characterClass
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7389118888795355500, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _shouldUseModifiers
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7389118888795355500, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _levelUpParticleEffect
+      value: 
+      objectReference: {fileID: 6334788195938576172, guid: d38f8f0107f8b2147a6ed5338ef12ee5, type: 3}
     - target: {fileID: 7902593945149551381, guid: 8d528b37540242941ac78fa03738537b, type: 3}
       propertyPath: _weapon
       value: 
@@ -202,3 +222,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10be4cabd7db70044a0f7a82d5ea3323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cursorMappings:
+  - type: 0
+    texture: {fileID: 2800000, guid: 21628736160fcc9488493401da3ef621, type: 3}
+    hotspot: {x: 0, y: 0}
+  - type: 3
+    texture: {fileID: 2800000, guid: 2e71a8202d3b4a3448ec85ced5a40265, type: 3}
+    hotspot: {x: 0, y: 0}
+  - type: 1
+    texture: {fileID: 2800000, guid: 1e1ecf843f705b34ab304dff88b037c1, type: 3}
+    hotspot: {x: 0, y: 0}
+  - type: 2
+    texture: {fileID: 2800000, guid: 2d18e23e3ce249b4489b8bcdd02d3f48, type: 3}
+    hotspot: {x: 0, y: 0}
+  - type: 4
+    texture: {fileID: 2800000, guid: f8c873f1e53e83f4aabf342d6be1dfc3, type: 3}
+    hotspot: {x: 0, y: 0}
+  _maxNavMeshProjectionDistance: 1
+  _maxNavPathLength: 40
+--- !u!114 &5251678236090457403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876865490578127764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11e1d956391da1f4ba25eabefb3c8333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _experiencePoints: 0

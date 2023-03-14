@@ -1,3 +1,4 @@
+using RPG.Attributes;
 using RPG.Core;
 using RPG.Saving;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace RPG.Movement
         private Animator _animator;
         private Health _health;
 
-        private void Start()
+        private void Awake()
         {
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
@@ -67,10 +68,9 @@ namespace RPG.Movement
         public void RestoreState(object state)
         {
             Dictionary<string, object> data = (Dictionary<string, object>)state;
-            GetComponent<NavMeshAgent>().enabled = false;
-            transform.position = ((SerializableVector3)data["position"]).ToVector();
+            _navMeshAgent.Warp(((SerializableVector3)data["position"]).ToVector());
             transform.eulerAngles = ((SerializableVector3)data["rotation"]).ToVector();
-            GetComponent<NavMeshAgent>().enabled = true;
+            GetComponent<ActionScheduler>().CancelCurrentAction();
         }
     }
 }
