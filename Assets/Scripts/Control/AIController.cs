@@ -14,6 +14,7 @@ namespace RPG.Control
     {
         [SerializeField] private float _chaseDistance = 5f;
         [SerializeField] private float _suspicionTime = 5f;
+        [SerializeField] private float _aggroCooldownTime = 5f;
         [SerializeField] private PatrolPath _patrolPath;
         [SerializeField] private float _waypointTolerance = 1f;
         [SerializeField] private float _waypointDwellTime = 3f;
@@ -27,6 +28,7 @@ namespace RPG.Control
         private LazyValue<Vector3> _guardPosition;
         private float _timeSinceLastSawPlayer = Mathf.Infinity;
         private float _timeSinceArrivedAtWaypoint = Mathf.Infinity;
+        private float _timeSinceAggrevated = Mathf.Infinity;
         private int _currentWaypointIndex = 0;
 
         private void Awake()
@@ -48,7 +50,7 @@ namespace RPG.Control
             if (_health.IsDead())
                 return;
 
-            if (InAttackRangeOfPlayer() && _fighter.CanAttack(_player))
+            if (IsAggrevated() && _fighter.CanAttack(_player))
             {
                 AttackBehaviour();
             }
@@ -64,6 +66,11 @@ namespace RPG.Control
             UpdateTimers();
         }
 
+        public void Aggrevate()
+        {
+            _timeSinceAggrevated = 0;
+        }
+
         private Vector3 GetGuardPosition()
         {
             return transform.position;
@@ -73,6 +80,7 @@ namespace RPG.Control
         {
             _timeSinceLastSawPlayer += Time.deltaTime;
             _timeSinceArrivedAtWaypoint += Time.deltaTime;
+            _timeSinceAggrevated += Time.deltaTime;
         }
 
         private void PatrolBehaviour()
@@ -124,10 +132,10 @@ namespace RPG.Control
             _fighter.Attack(_player);
         }
 
-        private bool InAttackRangeOfPlayer()
+        private bool IsAggrevated()
         {
             float distanceToplayer = Vector3.Distance(_player.transform.position, transform.position);
-            return distanceToplayer < _chaseDistance;
+            return distanceToplayer < _chaseDistance || _timeSinceAggrevated < _aggroCooldownTime;
         }
 
         private void OnDrawGizmosSelected()
