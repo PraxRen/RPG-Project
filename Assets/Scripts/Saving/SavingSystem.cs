@@ -45,10 +45,12 @@ namespace RPG.Saving
         private Dictionary<string, object> LoadFile(string saveFile)
         {
             string path = GetPathFromSaveFile(saveFile);
+
             if (!File.Exists(path))
             {
                 return new Dictionary<string, object>();
             }
+
             using (FileStream stream = File.Open(path, FileMode.Open))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
@@ -59,7 +61,8 @@ namespace RPG.Saving
         private void SaveFile(string saveFile, object state)
         {
             string path = GetPathFromSaveFile(saveFile);
-            print("Saving to " + path);
+            Debug.Log("Saving to " + path);
+
             using (FileStream stream = File.Open(path, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
@@ -82,6 +85,7 @@ namespace RPG.Saving
             foreach (SaveableEntity saveable in FindObjectsOfType<SaveableEntity>())
             {
                 string id = saveable.GetUniqueIdentifier();
+
                 if (state.ContainsKey(id))
                 {
                     saveable.RestoreState(state[id]);

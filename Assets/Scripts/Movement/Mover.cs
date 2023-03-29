@@ -7,8 +7,7 @@ using UnityEngine.AI;
 
 namespace RPG.Movement
 {
-    [RequireComponent(typeof(NavMeshAgent))]
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(NavMeshAgent), typeof(Animator), typeof(ActionScheduler))]
     public class Mover : MonoBehaviour, IAction, ISaveable
     {
         [SerializeField] private float _maxSpeed = 6f;
@@ -17,23 +16,11 @@ namespace RPG.Movement
         private NavMeshAgent _navMeshAgent;
         private Animator _animator;
         private Health _health;
-
-        private void Awake()
-        {
-            _navMeshAgent = GetComponent<NavMeshAgent>();
-            _animator = GetComponent<Animator>();
-            _health = GetComponent<Health>();
-        }
-
-        private void Update()
-        {
-            _navMeshAgent.enabled = !_health.IsDead();
-            UpdateAnimator();
-        }
+        private ActionScheduler _actionScheduler;
 
         public void StartMoveAction(Vector3 destination, float speedFraction)
         {
-            GetComponent<ActionScheduler>().StartAction(this);
+            _actionScheduler.StartAction(this);
             MoveTo(destination, speedFraction);
         }
 
@@ -61,32 +48,9 @@ namespace RPG.Movement
             return true;
         }
 
-        private float GetPathLength(NavMeshPath path)
-        {
-            float total = 0f;
-
-            if (path.corners.Length < 2)
-                return total;
-
-            for (int i = 0; i < path.corners.Length - 1; i++)
-            {
-                total += Vector3.Distance(path.corners[i], path.corners[i + 1]);
-            }
-
-            return total;
-        }
-
         public void Cancel()
         {
-            _navMeshAgent.isStopped= true;
-        }
-
-        private void UpdateAnimator()
-        {
-            Vector3 velocity = _navMeshAgent.velocity;
-            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-            float speed = localVelocity.z;
-            _animator.SetFloat("forwardSpeed", speed);
+            _navMeshAgent.isStopped = true;
         }
 
         public object CaptureState()
@@ -104,6 +68,43 @@ namespace RPG.Movement
             _navMeshAgent.Warp(((SerializableVector3)data["position"]).ToVector());
             transform.eulerAngles = ((SerializableVector3)data["rotation"]).ToVector();
             GetComponent<ActionScheduler>().CancelCurrentAction();
+        }
+
+        private void Awake()
+        {
+            _navMeshAgent = GetComponent<NavMeshAgent>();
+            _animator = GetComponent<Animator>();
+            _health = GetComponent<Health>();
+            _actionScheduler = GetComponent<ActionScheduler>();
+        }
+
+        private void Update()
+        {
+            _navMeshAgent.enabled = !_health.IsDead;
+            UpdateAnimator();
+        }
+
+        private float GetPathLength(NavMeshPath path)
+        {
+            float total = 0f;
+
+            if (path.corners.Length < 2)
+                return total;
+
+            for (int i = 0; i < path.corners.Length - 1; i++)
+            {
+                total += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+            }
+
+            return total;
+        }
+
+        private void UpdateAnimator()
+        {
+            Vector3 velocity = _navMeshAgent.velocity;
+            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+            float speed = localVelocity.z;
+            _animator.SetFloat("forwardSpeed", speed);
         }
     }
 }

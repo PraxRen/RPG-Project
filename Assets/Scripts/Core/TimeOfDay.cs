@@ -1,10 +1,11 @@
+using RPG.Saving;
 using System;
 using System.Linq;
 using UnityEngine;
 
 namespace RPG.Core
 {
-    public class TimeOfDay : MonoBehaviour
+    public class TimeOfDay : MonoBehaviour, ISaveable
     {
         public enum TypeTimeOfDay
         {
@@ -39,6 +40,16 @@ namespace RPG.Core
         public event Action OnDay;
         public event Action OnEvening;
         public event Action OnNight;
+
+        public object CaptureState()
+        {
+            return _currentTimeOfDay;
+        }
+
+        public void RestoreState(object state)
+        {
+            _currentTimeOfDay = (float)state;
+        }
 
         private void Start()
         {

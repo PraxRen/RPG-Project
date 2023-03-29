@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace RPG.Combat
 {
-    [RequireComponent(typeof(Health))]
     public class CombatTarget : MonoBehaviour, IRaycastable
     {
         public CursorType GetCursorType()
@@ -17,15 +16,19 @@ namespace RPG.Combat
 
         public bool HandleRaycast(PlayerController callingController)
         {
-            if (!callingController.GetComponent<Fighter>().CanAttack(gameObject))
+            if (callingController.TryGetComponent(out Fighter fighter) == false)
+            {
+                return false;
+            }
+
+            if (!fighter.CanAttack(gameObject))
             {
                 return false;
             }
 
             if (Input.GetMouseButton(0))
             {
-                callingController.GetComponent<Fighter>().Attack(gameObject);
-
+                fighter.Attack(gameObject);
             }
 
             return true;

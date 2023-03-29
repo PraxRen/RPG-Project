@@ -9,9 +9,15 @@ using UnityEngine;
 public class House : MonoBehaviour
 {
     [SerializeField] private TimeOfDay _timeOfDay;
+    [SerializeField] private bool _defaultStateWindowsLight = false;
     [SerializeField] private WindowLight[] _windowLights;
 
     private Coroutine _slowSwitchWindowsLight;
+
+    private void Awake()
+    {
+        _slowSwitchWindowsLight = StartCoroutine(SlowSwitchWindowsLight(_defaultStateWindowsLight, 0f));
+    }
 
     private void OnEnable()
     {

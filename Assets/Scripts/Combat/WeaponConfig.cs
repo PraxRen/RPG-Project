@@ -47,20 +47,6 @@ namespace RPG.Combat
             return weapon;
         }
 
-        private void DestroyOldWeapon(Transform rightHand, Transform leftHand)
-        {
-            Transform oldWeapon = rightHand.Find(weaponName);
-
-            if (oldWeapon == null)
-                oldWeapon = leftHand.Find(weaponName);
-
-            if (oldWeapon == null)
-                return;
-
-            oldWeapon.name = "DESTROYING";
-            Destroy(oldWeapon.gameObject);
-        }
-
         public bool HasProjectile()
         {
             return _projectile != null;
@@ -72,7 +58,7 @@ namespace RPG.Combat
             projectileInstance.SetTarget(target, instigator, calculatedDamage);
         }
 
-        public float GetDamage() 
+        public float GetDamage()
         {
             return _weaponDamage;
         }
@@ -85,6 +71,20 @@ namespace RPG.Combat
         public float GetRange()
         {
             return _weaponRange;
+        }
+
+        private void DestroyOldWeapon(Transform rightHand, Transform leftHand)
+        {
+            Transform oldWeapon = rightHand.Find(weaponName);
+
+            if (oldWeapon == null)
+                oldWeapon = leftHand.Find(weaponName);
+
+            if (oldWeapon == null)
+                return;
+
+            oldWeapon.name = "DESTROYING";
+            Destroy(oldWeapon.gameObject);
         }
 
         private Transform GetTransform(Transform rightHand, Transform leftHand)

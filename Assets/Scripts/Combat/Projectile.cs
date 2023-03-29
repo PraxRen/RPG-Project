@@ -1,9 +1,6 @@
 using RPG.Attributes;
-using RPG.Core;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace RPG.Combat
 {
@@ -16,11 +13,20 @@ namespace RPG.Combat
         [SerializeField] private float _lifeAfterImpact = 2;
         [SerializeField] private GameObject[] _destroyOnHit = null;
 
-        public UnityEvent OnHit;
+        public event Action OnHit;
 
         private Health _target = null;
         GameObject _instigator = null;
         private float _damage = 0;
+
+        public void SetTarget(Health target, GameObject instigator, float damage)
+        {
+            _target = target;
+            _damage = damage;
+            _instigator = instigator;
+
+            Destroy(gameObject, _maxLifeTime);
+        }
 
         private void Start()
         {
@@ -34,21 +40,12 @@ namespace RPG.Combat
                 return;
             }
 
-            if (_isHoming == true && _target.IsDead() == false)
+            if (_isHoming == true && _target.IsDead == false)
             {
                 transform.LookAt(GetAimLocation());
             }
 
             transform.Translate(Vector3.forward * _speed * Time.deltaTime);
-        }
-
-        public void SetTarget(Health target, GameObject instigator, float damage)
-        {
-            _target = target;
-            _damage = damage;
-            _instigator = instigator;
-
-            Destroy(gameObject, _maxLifeTime);
         }
 
         private Vector3 GetAimLocation()
@@ -68,12 +65,12 @@ namespace RPG.Combat
             if (_target.GetComponent<Health>() != _target)
                 return;
 
-            if (_target.IsDead())
+            if (_target.IsDead == true)
                 return;
 
             _target.TakeDamage(_instigator, _damage);
             _speed = 0;
-            OnHit.Invoke();
+            OnHit?.Invoke();
 
             if (_hitEffect != null)
             {

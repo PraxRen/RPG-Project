@@ -4,12 +4,12 @@ using RPG.Combat;
 using RPG.Core;
 using RPG.Movement;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Control
 {
+    [RequireComponent(typeof(Fighter), typeof(Health), typeof(Mover))]
+    [RequireComponent(typeof(ActionScheduler))]
     public class AIController : MonoBehaviour
     {
         [SerializeField] private float _chaseDistance = 5f;
@@ -20,10 +20,12 @@ namespace RPG.Control
         [SerializeField] private float _waypointDwellTime = 3f;
         [Range(0f, 1f)]
         [SerializeField] private float _patrolSpeedFraction = 0.2f;
+        [SerializeField] private float _shoutDistance = 5f;
 
         private Health _health;
         private Fighter _fighter;
         private Mover _mover;
+        private ActionScheduler _actionScheduler;
         private GameObject _player;
         private LazyValue<Vector3> _guardPosition;
         private float _timeSinceLastSawPlayer = Mathf.Infinity;
@@ -31,13 +33,34 @@ namespace RPG.Control
         private float _timeSinceAggrevated = Mathf.Infinity;
         private int _currentWaypointIndex = 0;
 
+        public void Aggrevate()
+        {
+            _timeSinceAggrevated = 0;
+        }
+
+        public void Aggrevate(float damage)
+        {
+            Aggrevate();
+        }
+
         private void Awake()
         {
             _fighter = GetComponent<Fighter>();
             _health = GetComponent<Health>();
             _mover = GetComponent<Mover>();
+            _actionScheduler = GetComponent<ActionScheduler>();
             _player = GameObject.FindWithTag("Player");
             _guardPosition = new LazyValue<Vector3>(GetGuardPosition);
+        }
+
+        private void OnEnable()
+        {
+            _health.OnTakeDamage += Aggrevate;
+        }
+
+        private void OnDisable()
+        {
+            _health.OnTakeDamage -= Aggrevate;
         }
 
         private void Start ()
@@ -47,10 +70,14 @@ namespace RPG.Control
 
         private void Update()
         {
-            if (_health.IsDead())
+            if (_health.IsDead == true)
                 return;
 
-            if (IsAggrevated() && _fighter.CanAttack(_player))
+            UpdateTimers();
+            bool isAggrevated = IsAggrevated();
+            bool isCanAttack = _fighter.CanAttack(_player);
+
+            if (isAggrevated && isCanAttack)
             {
                 AttackBehaviour();
             }
@@ -62,13 +89,6 @@ namespace RPG.Control
             {
                 PatrolBehaviour();
             }
-
-            UpdateTimers();
-        }
-
-        public void Aggrevate()
-        {
-            _timeSinceAggrevated = 0;
         }
 
         private Vector3 GetGuardPosition()
@@ -101,7 +121,6 @@ namespace RPG.Control
             {
                 _mover.StartMoveAction(nextPosition, _patrolSpeedFraction);
             }
-            
         }
 
         private bool AtWaypoint()
@@ -123,19 +142,40 @@ namespace RPG.Control
 
         private void SuspicionBehaviour()
         {
-            GetComponent<ActionScheduler>().CancelCurrentAction();
+            _actionScheduler.CancelCurrentAction();
         }
 
         private void AttackBehaviour()
         {
             _timeSinceLastSawPlayer = 0f;
             _fighter.Attack(_player);
+            AggrevateNearbyEnemies();
+        }
+
+        private void AggrevateNearbyEnemies()
+        {
+            RaycastHit[] hits = Physics.SphereCastAll(transform.position, _shoutDistance,Vector3.up, 0);
+
+            foreach (RaycastHit hit in hits)
+            {
+                AIController ai = hit.collider.GetComponent<AIController>();
+
+                if (ai == null)
+                    continue;
+
+                if (ai == this)
+                    continue;
+
+                ai.Aggrevate();
+            }
         }
 
         private bool IsAggrevated()
         {
             float distanceToplayer = Vector3.Distance(_player.transform.position, transform.position);
-            return distanceToplayer < _chaseDistance || _timeSinceAggrevated < _aggroCooldownTime;
+            bool isPlayerPositionNearby = distanceToplayer < _chaseDistance;
+            bool isTimeAggrivated = _timeSinceAggrevated < _aggroCooldownTime;
+            return isPlayerPositionNearby || isTimeAggrivated;
         }
 
         private void OnDrawGizmosSelected()

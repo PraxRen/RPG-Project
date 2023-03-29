@@ -21,6 +21,16 @@ namespace RPG.Stats
         private LazyValue<int> _currentLevel;
         private Experience _experience;
 
+        public int GetLevel()
+        {
+            return _currentLevel.value;
+        }
+
+        public float GetStat(Stat stat)
+        {
+            return (GetBaseStat(stat) + GetAdditiveModifier(stat)) * (1 + GetPercentageModifier(stat) / 100);
+        }
+
         private void Awake()
         {
             _experience = GetComponent<Experience>();
@@ -65,20 +75,12 @@ namespace RPG.Stats
             Instantiate(_levelUpParticleEffect, transform);
         }
 
-        public float GetStat(Stat stat)
-        {
-            return (GetBaseStat(stat) + GetAdditiveModifier(stat)) * (1 + GetPercentageModifier(stat) / 100);
-        }
 
         private float GetBaseStat(Stat stat)
         {
             return _progression.GetStat(stat, _characterClass, GetLevel());
         }
 
-        public int GetLevel()
-        {
-            return _currentLevel.value;
-        }
 
         private float GetAdditiveModifier(Stat stat)
         {

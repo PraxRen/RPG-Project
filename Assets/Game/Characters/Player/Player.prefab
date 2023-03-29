@@ -201,7 +201,7 @@ PrefabInstance:
     - target: {fileID: 7902593945149551381, guid: 8d528b37540242941ac78fa03738537b, type: 3}
       propertyPath: _defaultWeaponConfig
       value: 
-      objectReference: {fileID: 11400000, guid: 2fa2730ef0411e740baf2346b2168b28, type: 2}
+      objectReference: {fileID: 11400000, guid: 90feb7f7bcf43794992f62e2f62ecdca, type: 2}
     - target: {fileID: 8258863346343841869, guid: 8d528b37540242941ac78fa03738537b, type: 3}
       propertyPath: m_Name
       value: Player
@@ -255,6 +255,7 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: f8c873f1e53e83f4aabf342d6be1dfc3, type: 3}
     hotspot: {x: 0, y: 0}
   _maxNavMeshProjectionDistance: 1
+  _raycastRadius: 1
 --- !u!114 &5251678236090457403
 MonoBehaviour:
   m_ObjectHideFlags: 0

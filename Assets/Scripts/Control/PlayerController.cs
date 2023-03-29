@@ -12,8 +12,7 @@ using UnityEngine.AI;
 
 namespace RPG.Control
 {
-    [RequireComponent(typeof(Mover))]
-    [RequireComponent(typeof(Fighter))]
+    [RequireComponent(typeof(Mover), typeof(Health))]
     public class PlayerController : MonoBehaviour
     {
         [System.Serializable]
@@ -26,16 +25,14 @@ namespace RPG.Control
 
         [SerializeField] private CursorMapping[] _cursorMappings = null;
         [SerializeField] private float _maxNavMeshProjectionDistance = 1f;
-
+        [SerializeField] private float _raycastRadius = 1f;
 
         private Mover _mover;
-        private Fighter _fighter;
         private Health _health;
 
         private void Awake()
         {
             _mover = GetComponent<Mover>();
-            _fighter = GetComponent<Fighter>();
             _health = GetComponent<Health>();
         }
 
@@ -44,7 +41,7 @@ namespace RPG.Control
             if (InteractWithUI())
                 return;
 
-            if (_health.IsDead())
+            if (_health.IsDead == true)
             {
                 SetCursor(CursorType.None);
                 return;
@@ -94,7 +91,7 @@ namespace RPG.Control
 
         private RaycastHit[] RaycastAllSorted()
         {
-            RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
+            RaycastHit[] hits = Physics.SphereCastAll(GetMouseRay(), _raycastRadius);
             float[] distances = new float[hits.Length];
 
             for (int i = 0; i < hits.Length; i++)

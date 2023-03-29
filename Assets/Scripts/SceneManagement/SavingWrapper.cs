@@ -1,25 +1,41 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using RPG.Saving;
-using System;
 
 namespace RPG.SceneManagement
 {
+    [RequireComponent(typeof(SavingSystem))]
     public class SavingWrapper : MonoBehaviour
     {
         [SerializeField] private float fadeInTime = 0.2f;
 
         private const string defaultSaveFile = "save";
+        private SavingSystem _savingSystem;
+
+        public void Load()
+        {
+            _savingSystem.Load(defaultSaveFile);
+        }
+
+        public void Save()
+        {
+            _savingSystem.Save(defaultSaveFile);
+        }
+
+        public void Delete()
+        {
+            _savingSystem.Delete(defaultSaveFile);
+        }
 
         private void Awake()
         {
+            _savingSystem = GetComponent<SavingSystem>();
             StartCoroutine(LoadLastScene());
         }
 
         private IEnumerator LoadLastScene()
         {
-            yield return GetComponent<SavingSystem>().LoadLastScene(defaultSaveFile);
+            yield return _savingSystem.LoadLastScene(defaultSaveFile);
             Fader fader = FindObjectOfType<Fader>();
             fader.FadeOutImmediate();
             yield return fader.FadeIn(fadeInTime);
@@ -41,21 +57,6 @@ namespace RPG.SceneManagement
             {
                 Delete();
             }
-        }
-
-        public void Load()
-        {
-            GetComponent<SavingSystem>().Load(defaultSaveFile);
-        }
-
-        public void Save()
-        {
-            GetComponent<SavingSystem>().Save(defaultSaveFile);
-        }
-
-        public void Delete()
-        {
-            GetComponent<SavingSystem>().Delete(defaultSaveFile);
         }
     }
 }

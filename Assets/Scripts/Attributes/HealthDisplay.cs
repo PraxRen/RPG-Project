@@ -7,16 +7,12 @@ namespace RPG.Attributes
 {
     public class HealthDisplay : MonoBehaviour
     {
-        private Health _health;
-
-        private void Awake()
-        {
-            _health = GameObject.FindWithTag("Player").GetComponent<Health>();
-        }
+        [SerializeField] private Health _health;
+        [SerializeField] private Text _text;
 
         private void Update()
         {
-            GetComponent<Text>().text = string.Format("{0:0}/{1:0}", _health.GetHealthPoints(), _health.GetMaxHealthPoints());
+            _text.text = string.Format("{0:0}/{1:0}", _health.GetHealthPoints(), _health.GetMaxHealthPoints());
         }
     }
 }

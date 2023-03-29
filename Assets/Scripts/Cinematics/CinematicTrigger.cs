@@ -6,9 +6,11 @@ using UnityEngine.Playables;
 
 namespace RPG.Cinematics
 {
+    [RequireComponent(typeof(PlayableDirector))]
     public class CinematicTrigger : MonoBehaviour, ISaveable
     {
         private bool _alreadyTriggered = false;
+        private PlayableDirector _playableDirector;
 
         public object CaptureState()
         {
@@ -20,12 +22,17 @@ namespace RPG.Cinematics
             _alreadyTriggered = (bool)state;
         }
 
+        private void Awake()
+        {
+            _playableDirector =  GetComponent<PlayableDirector>();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (!_alreadyTriggered && other.gameObject.tag == "Player")
+            if (!_alreadyTriggered && other.gameObject.tag.ToLower() == "player")
             {
-                _alreadyTriggered = true; 
-                GetComponent<PlayableDirector>().Play();
+                _alreadyTriggered = true;
+                _playableDirector.Play();
             }
         }
     }

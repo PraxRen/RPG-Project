@@ -8,16 +8,6 @@ namespace RPG.Control
     {
         private const float _waypointGizmoRadius = 0.3f;
 
-        private void OnDrawGizmos()
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                int j = GetNextIndex(i);
-                Gizmos.DrawSphere(GetWaypoint(i), _waypointGizmoRadius);
-                Gizmos.DrawLine(GetWaypoint(i), GetWaypoint(j));
-            }
-        }
-
         public int GetNextIndex(int i)
         {
             if (i + 1 == transform.childCount)
@@ -31,6 +21,16 @@ namespace RPG.Control
         public Vector3 GetWaypoint(int i)
         {
             return transform.GetChild(i).position;
+        }
+
+        private void OnDrawGizmos()
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                int j = GetNextIndex(i);
+                Gizmos.DrawSphere(GetWaypoint(i), _waypointGizmoRadius);
+                Gizmos.DrawLine(GetWaypoint(i), GetWaypoint(j));
+            }
         }
     }
 }

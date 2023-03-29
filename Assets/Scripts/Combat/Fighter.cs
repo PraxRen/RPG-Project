@@ -4,15 +4,13 @@ using RPG.Core;
 using RPG.Movement;
 using RPG.Saving;
 using RPG.Stats;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.iOS;
 using UnityEngine;
 
 namespace RPG.Combat
 {
-    [RequireComponent(typeof(Mover))]
+    [RequireComponent(typeof(Mover), typeof(Animator), typeof(BaseStats))]
+    [RequireComponent(typeof(ActionScheduler))]
     public class Fighter : MonoBehaviour, IAction, ISaveable, IModifierProvider
     {
         [SerializeField] private float _timeBetweenAttack = 1f;
@@ -22,13 +20,83 @@ namespace RPG.Combat
 
         private Health _target;
         private Mover _mover;
+        private Animator _animator;
+        private BaseStats _baseStats;
+        private ActionScheduler _actionScheduler;
         private float _timeSinceLastAttack = Mathf.Infinity;
         private WeaponConfig _currentWeaponConfig;
         private LazyValue<Weapon> _currentWeapon;
 
+        public void EquipWeapon(WeaponConfig weaponConfig)
+        {
+            _currentWeaponConfig = weaponConfig;
+            _currentWeapon.value = AttachWeapon(weaponConfig);
+        }
+
+        public Health GetTarget()
+        {
+            return _target;
+        }
+
+        public void Attack(GameObject combatTarget)
+        {
+            _actionScheduler.StartAction(this);
+            _target = combatTarget.GetComponent<Health>();
+        }
+
+        public bool CanAttack(GameObject combatTarget)
+        {
+            if (combatTarget == null)
+                return false;
+
+            if (!_mover.CanMoveTo(combatTarget.transform.position) && !GetIsInRange(combatTarget.transform))
+                return false;
+
+            Health targetToTest = combatTarget.GetComponent<Health>();
+            return targetToTest != null && !targetToTest.IsDead;
+        }
+
+        public void Cancel()
+        {
+            StopAttack();
+            _target = null;
+            _mover.Cancel();
+        }
+
+        public IEnumerable<float> GetAdditiveModifiers(Stat stat)
+        {
+            if (stat == Stat.Damage)
+            {
+                yield return _currentWeaponConfig.GetDamage();
+            }
+        }
+
+        public IEnumerable<float> GetPercentageModifiers(Stat stat)
+        {
+            if (stat == Stat.Damage)
+            {
+                yield return _currentWeaponConfig.GetPercentageBonus();
+            }
+        }
+
+        public object CaptureState()
+        {
+            return _currentWeaponConfig.name;
+        }
+
+        public void RestoreState(object state)
+        {
+            string weaponName = (string)state;
+            WeaponConfig weapon = Resources.Load<WeaponConfig>(weaponName);
+            EquipWeapon(weapon);
+        }
+
         private void Awake()
         {
             _mover = GetComponent<Mover>();
+            _animator = GetComponent<Animator>();
+            _baseStats = GetComponent<BaseStats>();
+            _actionScheduler = GetComponent<ActionScheduler>();
             _currentWeaponConfig = _defaultWeaponConfig;
             _currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
         }
@@ -50,10 +118,10 @@ namespace RPG.Combat
             if (_target == null)
                 return;
 
-            if (_target.IsDead())
+            if (_target.IsDead)
                 return;
 
-            if (!GetIsInRange())
+            if (!GetIsInRange(_target.transform))
             {
                 _mover.MoveTo(_target.transform.position, 1f);
             }
@@ -64,21 +132,9 @@ namespace RPG.Combat
             }
         }
 
-        public void EquipWeapon(WeaponConfig weaponConfig)
-        {
-            _currentWeaponConfig = weaponConfig;
-            _currentWeapon.value = AttachWeapon(weaponConfig);
-        }
-
         private Weapon AttachWeapon(WeaponConfig weaponConfig)
         {
-            Animator animator = GetComponent<Animator>();
-            return weaponConfig.Spawn(_rightHandTransform, _leftHandTransform, animator);
-        }
-
-        public Health GetTarget()
-        {
-            return _target;
+            return weaponConfig.Spawn(_rightHandTransform, _leftHandTransform, _animator);
         }
 
         private void AttackBehaviour()
@@ -90,65 +146,23 @@ namespace RPG.Combat
                 TriggerAttack();
                 _timeSinceLastAttack = 0f;
             }
+        }
 
+        private bool GetIsInRange(Transform targetTransform)
+        {
+            return Vector3.Distance(transform.position, targetTransform.position) < _currentWeaponConfig.GetRange();
         }
 
         private void TriggerAttack()
         {
-            GetComponent<Animator>().ResetTrigger("stopAttack");
-            GetComponent<Animator>().SetTrigger("attack");
-        }
-
-        private bool GetIsInRange()
-        {
-            return Vector3.Distance(transform.position, _target.transform.position) < _currentWeaponConfig.GetRange();
-        }
-
-        public void Attack(GameObject combatTarget)
-        {
-            GetComponent<ActionScheduler>().StartAction(this);
-            _target = combatTarget.GetComponent<Health>();
-        }
-
-        public bool CanAttack(GameObject combatTarget)
-        {
-            if (combatTarget == null)
-                return false;
-
-            if (!_mover.CanMoveTo(combatTarget.transform.position))
-                return false;
-
-            Health targetToTest = combatTarget.GetComponent<Health>();
-            return targetToTest != null && !targetToTest.IsDead();
-        }
-
-        public void Cancel()
-        {
-            StopAttack();
-            _target = null;
-            _mover.Cancel();
+            _animator.ResetTrigger("stopAttack");
+            _animator.SetTrigger("attack");
         }
 
         private void StopAttack()
         {
-            GetComponent<Animator>().ResetTrigger("attack");
-            GetComponent<Animator>().SetTrigger("stopAttack");
-        }
-
-        public IEnumerable<float> GetAdditiveModifiers(Stat stat)
-        {
-            if (stat == Stat.Damage)
-            {
-                yield return _currentWeaponConfig.GetDamage();
-            }
-        }
-
-        public IEnumerable<float> GetPercentageModifiers(Stat stat)
-        {
-            if (stat == Stat.Damage)
-            {
-                yield return _currentWeaponConfig.GetPercentageBonus();
-            }
+            _animator.ResetTrigger("attack");
+            _animator.SetTrigger("stopAttack");
         }
 
         private void Hit()
@@ -156,7 +170,7 @@ namespace RPG.Combat
             if (_target == null)
                 return;
 
-            float damage = GetComponent<BaseStats>().GetStat(Stat.Damage);
+            float damage = _baseStats.GetStat(Stat.Damage);
 
             if (_currentWeapon.value != null)
             {
@@ -177,19 +191,5 @@ namespace RPG.Combat
         {
             Hit();
         }
-
-        public object CaptureState()
-        {
-            return _currentWeaponConfig.name;
-        }
-
-        public void RestoreState(object state)
-        {
-            string weaponName = (string)state;
-            WeaponConfig weapon = Resources.Load<WeaponConfig>(weaponName);
-            EquipWeapon(weapon);
-        }
-
-
     }
 } 

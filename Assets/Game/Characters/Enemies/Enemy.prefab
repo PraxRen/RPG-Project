@@ -129,6 +129,10 @@ PrefabInstance:
       propertyPath: OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 1467171950, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _maxSpeed
+      value: 4.7
+      objectReference: {fileID: 0}
     - target: {fileID: 1467171951, guid: 8d528b37540242941ac78fa03738537b, type: 3}
       propertyPath: m_Speed
       value: 4
@@ -248,11 +252,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chaseDistance: 5
-  _suspicionTime: 5
+  _suspicionTime: 3
+  _aggroCooldownTime: 3
   _patrolPath: {fileID: 0}
   _waypointTolerance: 1
   _waypointDwellTime: 3
-  _patrolSpeedFraction: 0.2
+  _patrolSpeedFraction: 0.3
+  _shoutDistance: 7
 --- !u!114 &9145757193401713899
 MonoBehaviour:
   m_ObjectHideFlags: 0

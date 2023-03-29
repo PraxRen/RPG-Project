@@ -265,6 +265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8600853727647296246}
+  - component: {fileID: 3202289711837679837}
   m_Layer: 0
   m_Name: Audio Sources
   m_TagString: Untagged
@@ -289,6 +290,21 @@ Transform:
   m_Father: {fileID: 7254015682933358101}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3202289711837679837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7923443217934949091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93f8035850344044ca39c812a1130d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damageSound: {fileID: 6561819329391310084}
+  _dieSound: {fileID: 3704462687952313360}
+  _health: {fileID: -6702299964554269961}
 --- !u!1 &8258863346343841869
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,6 +370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxSpeed: 6
+  _maxNavPathLength: 40
 --- !u!195 &1467171951
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -437,48 +454,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _regenerationPercentage: 70
-  OnTakeDamage:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5809497767379994769}
-        m_TargetAssemblyTypeName: RPG.UI.DamageText.DamageTextSpawner, Assembly-CSharp
-        m_MethodName: Spawn
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6561819329391310084}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnDie:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3704462687952313360}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &66082677260823533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,23 +565,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3031748720788190651, guid: 35452c56c0e480d46bb230f3e4702c3a, type: 3}
+      propertyPath: _health
+      value: 
+      objectReference: {fileID: -6702299964554269961}
     - target: {fileID: 5806428550607044327, guid: 35452c56c0e480d46bb230f3e4702c3a, type: 3}
       propertyPath: m_Name
       value: Damage Text Spawner
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35452c56c0e480d46bb230f3e4702c3a, type: 3}
---- !u!114 &5809497767379994769 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3031748720788190651, guid: 35452c56c0e480d46bb230f3e4702c3a, type: 3}
-  m_PrefabInstance: {fileID: 8830877268479786282}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a45f6d37ec4860c4992ae140caab005d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &6394452364653814769 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2463535643638619867, guid: 35452c56c0e480d46bb230f3e4702c3a, type: 3}

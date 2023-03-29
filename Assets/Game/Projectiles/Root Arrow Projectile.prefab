@@ -204,21 +204,6 @@ MonoBehaviour:
   _lifeAfterImpact: 0.2
   _destroyOnHit:
   - {fileID: 6948981695990466145}
-  OnHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7837963435767611007}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!65 &3474575331728304441
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -369,6 +354,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2512023237261184900}
+  - component: {fileID: 8839435172062206690}
   m_Layer: 0
   m_Name: Audio Sources
   m_TagString: Untagged
@@ -393,6 +379,21 @@ Transform:
   m_Father: {fileID: 7151793459245538615}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8839435172062206690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4533366168644347038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf6a332728e34d54bbb4f902c93f13ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _LaunchSound: {fileID: 7301130509813726084}
+  _hitSound: {fileID: 7837963435767611007}
+  _projectile: {fileID: 2579246644688413363}
 --- !u!1 &4929176983455862111
 GameObject:
   m_ObjectHideFlags: 0

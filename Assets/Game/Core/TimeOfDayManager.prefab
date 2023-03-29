@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129b4bd3746326449aa425fe36358456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sun: {fileID: 0}
-  secondsInFullDay: 30
-  currentTimeOfDay: 0
-  timeMultiplier: 1
+  _sun: {fileID: 0}
+  _secondsInFullDay: 120
+  _currentTimeOfDay: 0.22
+  _timeMultiplier: 1
   _skyboxes:
   - TypeTimeOfDay: 0
     Skybox: {fileID: 2100000, guid: 1cf6f4c6e6e0518419839d3f5448dd99, type: 2}

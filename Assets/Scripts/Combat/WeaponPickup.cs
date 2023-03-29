@@ -1,8 +1,7 @@
 using RPG.Attributes;
 using RPG.Control;
-using System;
+using RPG.Movement;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Combat
@@ -13,9 +12,26 @@ namespace RPG.Combat
         [SerializeField] private float _healthToRestore = 0;
         [SerializeField] private float _respawnTime = 5;
 
+        public bool HandleRaycast(PlayerController callingController)
+        {
+            Mover mover = callingController.GetComponent<Mover>();
+
+            if (Input.GetMouseButton(0) && mover.CanMoveTo(transform.position))
+            {
+                mover.StartMoveAction(transform.position, 1f);
+            }
+
+            return true;
+        }
+
+        public CursorType GetCursorType()
+        {
+            return CursorType.Pickup;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Player")
+            if (other.gameObject.tag.ToLower() == "player")
             {
                 Pickup(other.gameObject);
             }
@@ -51,21 +67,6 @@ namespace RPG.Combat
             {
                 child.gameObject.SetActive(shouldShow);
             }
-        }
-
-        public bool HandleRaycast(PlayerController callingController)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Pickup(callingController.gameObject);
-            }
-
-            return true;
-        }
-
-        public CursorType GetCursorType()
-        {
-            return CursorType.Pickup;
         }
     }
 }
