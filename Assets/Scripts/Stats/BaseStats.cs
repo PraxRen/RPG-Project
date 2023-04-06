@@ -1,8 +1,5 @@
 using GameDevTV.Utils;
-using RPG.Combat;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Stats
@@ -21,25 +18,10 @@ namespace RPG.Stats
         private LazyValue<int> _currentLevel;
         private Experience _experience;
 
-        public int GetLevel()
-        {
-            return _currentLevel.value;
-        }
-
-        public float GetStat(Stat stat)
-        {
-            return (GetBaseStat(stat) + GetAdditiveModifier(stat)) * (1 + GetPercentageModifier(stat) / 100);
-        }
-
         private void Awake()
         {
             _experience = GetComponent<Experience>();
             _currentLevel = new LazyValue<int>(CalculateLevel);
-        }
-
-        private void Start()
-        {
-            _currentLevel.ForceInit();
         }
 
         private void OnEnable()
@@ -56,6 +38,21 @@ namespace RPG.Stats
             {
                 _experience.OnExperienceGained -= UpdateLevel;
             }
+        }
+
+        private void Start()
+        {
+            _currentLevel.ForceInit();
+        }
+
+        public int GetLevel()
+        {
+            return _currentLevel.value;
+        }
+
+        public float GetStat(Stat stat)
+        {
+            return (GetBaseStat(stat) + GetAdditiveModifier(stat)) * (1 + GetPercentageModifier(stat) / 100);
         }
 
         private void UpdateLevel()
@@ -75,12 +72,10 @@ namespace RPG.Stats
             Instantiate(_levelUpParticleEffect, transform);
         }
 
-
         private float GetBaseStat(Stat stat)
         {
             return _progression.GetStat(stat, _characterClass, GetLevel());
         }
-
 
         private float GetAdditiveModifier(Stat stat)
         {

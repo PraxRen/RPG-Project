@@ -41,16 +41,6 @@ namespace RPG.Core
         public event Action OnEvening;
         public event Action OnNight;
 
-        public object CaptureState()
-        {
-            return _currentTimeOfDay;
-        }
-
-        public void RestoreState(object state)
-        {
-            _currentTimeOfDay = (float)state;
-        }
-
         private void Start()
         {
             Array.Sort(_skyboxes, (x, y) => x.TimeOfDay.CompareTo(y.TimeOfDay));
@@ -63,6 +53,16 @@ namespace RPG.Core
 
             if (_currentTimeOfDay >= 1)
                 _currentTimeOfDay = 0;
+        }
+
+        public object CaptureState()
+        {
+            return _currentTimeOfDay;
+        }
+
+        public void RestoreState(object state)
+        {
+            _currentTimeOfDay = (float)state;
         }
 
         private void UpdateSun()

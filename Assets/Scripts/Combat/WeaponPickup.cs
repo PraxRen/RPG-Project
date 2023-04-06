@@ -12,6 +12,14 @@ namespace RPG.Combat
         [SerializeField] private float _healthToRestore = 0;
         [SerializeField] private float _respawnTime = 5;
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.TryGetComponent(out PlayerController playerController) == true)
+            {
+                Pickup(other.gameObject);
+            }
+        }
+
         public bool HandleRaycast(PlayerController callingController)
         {
             Mover mover = callingController.GetComponent<Mover>();
@@ -27,14 +35,6 @@ namespace RPG.Combat
         public CursorType GetCursorType()
         {
             return CursorType.Pickup;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.tag.ToLower() == "player")
-            {
-                Pickup(other.gameObject);
-            }
         }
 
         private void Pickup(GameObject subject)

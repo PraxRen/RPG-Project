@@ -1,3 +1,4 @@
+using RPG.Control;
 using RPG.Saving;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,20 @@ namespace RPG.Cinematics
         private bool _alreadyTriggered = false;
         private PlayableDirector _playableDirector;
 
+        private void Awake()
+        {
+            _playableDirector = GetComponent<PlayableDirector>();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!_alreadyTriggered && other.gameObject.TryGetComponent(out PlayerController playerController) == true)
+            {
+                _alreadyTriggered = true;
+                _playableDirector.Play();
+            }
+        }
+
         public object CaptureState()
         {
             return _alreadyTriggered;
@@ -20,20 +35,6 @@ namespace RPG.Cinematics
         public void RestoreState(object state)
         {
             _alreadyTriggered = (bool)state;
-        }
-
-        private void Awake()
-        {
-            _playableDirector =  GetComponent<PlayableDirector>();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (!_alreadyTriggered && other.gameObject.tag.ToLower() == "player")
-            {
-                _alreadyTriggered = true;
-                _playableDirector.Play();
-            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using RPG.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,14 @@ namespace RPG.Attributes
 {
     public class HealthDisplay : MonoBehaviour
     {
-        [SerializeField] private Health _health;
         [SerializeField] private Text _text;
+
+        private Health _health;
+
+        private void Start()
+        {
+            _health = PersistentObjects.Instance.Player.GetComponent<Health>();
+        }
 
         private void Update()
         {

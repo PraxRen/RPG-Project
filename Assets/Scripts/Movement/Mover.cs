@@ -18,6 +18,20 @@ namespace RPG.Movement
         private Health _health;
         private ActionScheduler _actionScheduler;
 
+        private void Awake()
+        {
+            _navMeshAgent = GetComponent<NavMeshAgent>();
+            _animator = GetComponent<Animator>();
+            _health = GetComponent<Health>();
+            _actionScheduler = GetComponent<ActionScheduler>();
+        }
+
+        private void Update()
+        {
+            _navMeshAgent.enabled = !_health.IsDead;
+            UpdateAnimator();
+        }
+
         public void StartMoveAction(Vector3 destination, float speedFraction)
         {
             _actionScheduler.StartAction(this);
@@ -64,24 +78,12 @@ namespace RPG.Movement
 
         public void RestoreState(object state)
         {
+            _actionScheduler.CancelCurrentAction();
             Dictionary<string, object> data = (Dictionary<string, object>)state;
-            _navMeshAgent.Warp(((SerializableVector3)data["position"]).ToVector());
+            _navMeshAgent.enabled = false;
+            transform.position = ((SerializableVector3)data["position"]).ToVector();
             transform.eulerAngles = ((SerializableVector3)data["rotation"]).ToVector();
-            GetComponent<ActionScheduler>().CancelCurrentAction();
-        }
-
-        private void Awake()
-        {
-            _navMeshAgent = GetComponent<NavMeshAgent>();
-            _animator = GetComponent<Animator>();
-            _health = GetComponent<Health>();
-            _actionScheduler = GetComponent<ActionScheduler>();
-        }
-
-        private void Update()
-        {
-            _navMeshAgent.enabled = !_health.IsDead;
-            UpdateAnimator();
+            _navMeshAgent.enabled = true;
         }
 
         private float GetPathLength(NavMeshPath path)
@@ -104,7 +106,7 @@ namespace RPG.Movement
             Vector3 velocity = _navMeshAgent.velocity;
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
             float speed = localVelocity.z;
-            _animator.SetFloat("forwardSpeed", speed);
+            _animator.SetFloat(AnimatorCharacterManager.Instance.Params.ForwardSpeed, speed);
         }
     }
 }

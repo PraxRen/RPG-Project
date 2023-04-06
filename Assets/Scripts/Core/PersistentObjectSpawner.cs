@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Core
@@ -18,14 +15,8 @@ namespace RPG.Core
                 return;
             }
 
-            SpawnPersistentObjects();
+            Instantiate(persistentObjectPrefab);
             _hasSpawned = true;
-        }
-
-        private void SpawnPersistentObjects()
-        {
-            GameObject persistentObject = Instantiate(persistentObjectPrefab);
-            DontDestroyOnLoad(persistentObject);
         }
     }
 }

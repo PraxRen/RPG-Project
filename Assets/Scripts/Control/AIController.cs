@@ -33,23 +33,13 @@ namespace RPG.Control
         private float _timeSinceAggrevated = Mathf.Infinity;
         private int _currentWaypointIndex = 0;
 
-        public void Aggrevate()
-        {
-            _timeSinceAggrevated = 0;
-        }
-
-        public void Aggrevate(float damage)
-        {
-            Aggrevate();
-        }
-
         private void Awake()
         {
             _fighter = GetComponent<Fighter>();
             _health = GetComponent<Health>();
             _mover = GetComponent<Mover>();
             _actionScheduler = GetComponent<ActionScheduler>();
-            _player = GameObject.FindWithTag("Player");
+            _player = PersistentObjects.Instance.Player;
             _guardPosition = new LazyValue<Vector3>(GetGuardPosition);
         }
 
@@ -91,6 +81,21 @@ namespace RPG.Control
             }
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, _chaseDistance);
+        }
+
+        public void Aggrevate()
+        {
+            _timeSinceAggrevated = 0;
+        }
+
+        public void Aggrevate(float damage)
+        {
+            Aggrevate();
+        }
         private Vector3 GetGuardPosition()
         {
             return transform.position;
@@ -177,12 +182,5 @@ namespace RPG.Control
             bool isTimeAggrivated = _timeSinceAggrevated < _aggroCooldownTime;
             return isPlayerPositionNearby || isTimeAggrivated;
         }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, _chaseDistance);
-        }
     }
-
 }

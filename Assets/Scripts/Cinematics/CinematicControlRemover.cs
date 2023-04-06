@@ -10,14 +10,15 @@ namespace RPG.Cinematics
     [RequireComponent(typeof(PlayableDirector))]
     public class CinematicControlRemover : MonoBehaviour
     {
-        [SerializeField] PlayerController _playerController;
-        [SerializeField] ActionScheduler _playerActionScheduler;
-
         private PlayableDirector _playableDirector;
+        private PlayerController _playerController;
+        private ActionScheduler _playerActionScheduler;
 
         private void Awake()
         {
             _playableDirector = GetComponent<PlayableDirector>();
+            _playerController = PersistentObjects.Instance.Player.GetComponent<PlayerController>();
+            _playerActionScheduler = PersistentObjects.Instance.Player.GetComponent<ActionScheduler>();
         }
 
         private void OnEnable()

@@ -19,45 +19,9 @@ namespace RPG.Combat
         GameObject _instigator = null;
         private float _damage = 0;
 
-        public void SetTarget(Health target, GameObject instigator, float damage)
-        {
-            _target = target;
-            _damage = damage;
-            _instigator = instigator;
-
-            Destroy(gameObject, _maxLifeTime);
-        }
-
         private void Start()
         {
             transform.LookAt(GetAimLocation());
-        }
-
-        private void Update()
-        {
-            if (_target == null)
-            {
-                return;
-            }
-
-            if (_isHoming == true && _target.IsDead == false)
-            {
-                transform.LookAt(GetAimLocation());
-            }
-
-            transform.Translate(Vector3.forward * _speed * Time.deltaTime);
-        }
-
-        private Vector3 GetAimLocation()
-        {
-            CapsuleCollider targetCapsule = _target.GetComponent<CapsuleCollider>();
-
-            if (targetCapsule == null)
-            {
-                return _target.transform.position;
-            }
-
-            return _target.transform.position + Vector3.up * targetCapsule.height / 2;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -83,6 +47,42 @@ namespace RPG.Combat
             }
 
             Destroy(gameObject, _lifeAfterImpact);
+        }
+
+        private void Update()
+        {
+            if (_target == null)
+            {
+                return;
+            }
+
+            if (_isHoming == true && _target.IsDead == false)
+            {
+                transform.LookAt(GetAimLocation());
+            }
+
+            transform.Translate(Vector3.forward * _speed * Time.deltaTime);
+        }
+
+        public void SetTarget(Health target, GameObject instigator, float damage)
+        {
+            _target = target;
+            _damage = damage;
+            _instigator = instigator;
+
+            Destroy(gameObject, _maxLifeTime);
+        }
+
+        private Vector3 GetAimLocation()
+        {
+            CapsuleCollider targetCapsule = _target.GetComponent<CapsuleCollider>();
+
+            if (targetCapsule == null)
+            {
+                return _target.transform.position;
+            }
+
+            return _target.transform.position + Vector3.up * targetCapsule.height / 2;
         }
     }
 }

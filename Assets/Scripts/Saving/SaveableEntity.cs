@@ -8,7 +8,30 @@ namespace RPG.Saving
     public class SaveableEntity : MonoBehaviour
     {
         [SerializeField] string uniqueIdentifier = "";
+        
         static Dictionary<string, SaveableEntity> globalLookup = new Dictionary<string, SaveableEntity>();
+
+#if UNITY_EDITOR
+        private void Update()
+        {
+            if (Application.IsPlaying(gameObject))
+                return;
+
+            if (string.IsNullOrEmpty(gameObject.scene.path))
+                return;
+
+            SerializedObject serializedObject = new SerializedObject(this);
+            SerializedProperty property = serializedObject.FindProperty("uniqueIdentifier");
+
+            if (string.IsNullOrEmpty(property.stringValue) || !IsUnique(property.stringValue))
+            {
+                property.stringValue = System.Guid.NewGuid().ToString();
+                serializedObject.ApplyModifiedProperties();
+            }
+
+            globalLookup[property.stringValue] = this;
+        }
+#endif
 
         public string GetUniqueIdentifier()
         {
@@ -41,28 +64,6 @@ namespace RPG.Saving
                 }
             }
         }
-
-#if UNITY_EDITOR
-        private void Update() 
-        {
-            if (Application.IsPlaying(gameObject)) 
-                return;
-
-            if (string.IsNullOrEmpty(gameObject.scene.path)) 
-                return;
-
-            SerializedObject serializedObject = new SerializedObject(this);
-            SerializedProperty property = serializedObject.FindProperty("uniqueIdentifier");
-            
-            if (string.IsNullOrEmpty(property.stringValue) || !IsUnique(property.stringValue))
-            {
-                property.stringValue = System.Guid.NewGuid().ToString();
-                serializedObject.ApplyModifiedProperties();
-            }
-
-            globalLookup[property.stringValue] = this;
-        }
-#endif
 
         private bool IsUnique(string candidate)
         {

@@ -27,6 +27,42 @@ namespace RPG.Combat
         private WeaponConfig _currentWeaponConfig;
         private LazyValue<Weapon> _currentWeapon;
 
+        private void Awake()
+        {
+            _mover = GetComponent<Mover>();
+            _animator = GetComponent<Animator>();
+            _baseStats = GetComponent<BaseStats>();
+            _actionScheduler = GetComponent<ActionScheduler>();
+            _currentWeaponConfig = _defaultWeaponConfig;
+            _currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
+        }
+        
+        private void Start()
+        {
+            _currentWeapon.ForceInit();
+        }
+
+        private void Update()
+        {
+            _timeSinceLastAttack += Time.deltaTime;
+
+            if (_target == null)
+                return;
+
+            if (_target.IsDead)
+                return;
+
+            if (!GetIsInRange(_target.transform))
+            {
+                _mover.MoveTo(_target.transform.position, 1f);
+            }
+            else
+            {
+                _mover.Cancel();
+                AttackBehaviour();
+            }
+        }
+
         public void EquipWeapon(WeaponConfig weaponConfig)
         {
             _currentWeaponConfig = weaponConfig;
@@ -91,45 +127,9 @@ namespace RPG.Combat
             EquipWeapon(weapon);
         }
 
-        private void Awake()
-        {
-            _mover = GetComponent<Mover>();
-            _animator = GetComponent<Animator>();
-            _baseStats = GetComponent<BaseStats>();
-            _actionScheduler = GetComponent<ActionScheduler>();
-            _currentWeaponConfig = _defaultWeaponConfig;
-            _currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
-        }
-
         private Weapon SetupDefaultWeapon()
         {
             return AttachWeapon(_defaultWeaponConfig);
-        }
-
-        private void Start()
-        {
-            _currentWeapon.ForceInit();
-        }
-
-        private void Update()
-        {
-            _timeSinceLastAttack += Time.deltaTime;
-
-            if (_target == null)
-                return;
-
-            if (_target.IsDead)
-                return;
-
-            if (!GetIsInRange(_target.transform))
-            {
-                _mover.MoveTo(_target.transform.position, 1f);
-            }
-            else
-            {
-                _mover.Cancel();
-                AttackBehaviour();
-            }
         }
 
         private Weapon AttachWeapon(WeaponConfig weaponConfig)
@@ -155,14 +155,14 @@ namespace RPG.Combat
 
         private void TriggerAttack()
         {
-            _animator.ResetTrigger("stopAttack");
-            _animator.SetTrigger("attack");
+            _animator.ResetTrigger(AnimatorCharacterManager.Instance.Params.StopAttack);
+            _animator.SetTrigger(AnimatorCharacterManager.Instance.Params.Attack);
         }
 
         private void StopAttack()
         {
-            _animator.ResetTrigger("attack");
-            _animator.SetTrigger("stopAttack");
+            _animator.ResetTrigger(AnimatorCharacterManager.Instance.Params.Attack);
+            _animator.SetTrigger(AnimatorCharacterManager.Instance.Params.StopAttack);
         }
 
         private void Hit()

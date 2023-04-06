@@ -1,13 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using RPG.Movement;
 using System;
-using RPG.Combat;
-using RPG.Core;
 using RPG.Attributes;
 using UnityEngine.EventSystems;
-using Unity.VisualScripting;
 using UnityEngine.AI;
 
 namespace RPG.Control
@@ -67,7 +62,6 @@ namespace RPG.Control
             return false;
         }
 
-
         private bool InteractWithComponent()
         {
             RaycastHit[] hits = RaycastAllSorted();
@@ -102,7 +96,6 @@ namespace RPG.Control
             Array.Sort(distances, hits);
             return hits;
         }
-
 
         private void SetCursor(CursorType type)
         {

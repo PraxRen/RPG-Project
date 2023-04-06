@@ -23,6 +23,29 @@ namespace RPG.Attributes
         public event Action<float> OnTakeDamage;
         public event Action OnDie;
 
+        private void Awake()
+        {
+            _healthPoints = new LazyValue<float>(GetInitialHealth);
+            _baseStats = GetComponent<BaseStats>();
+            _animator = GetComponent<Animator>();
+            _actionScheduler = GetComponent<ActionScheduler>();
+        }
+
+        private void OnEnable()
+        {
+            _baseStats.OnLevelUp += RegenerateHealth;
+        }
+
+        private void OnDisable()
+        {
+            _baseStats.OnLevelUp -= RegenerateHealth;
+        }
+
+        private void Start()
+        {
+            _healthPoints.ForceInit();
+        }
+
         public void TakeDamage(GameObject instigator, float damage)
         {
             _healthPoints.value = Mathf.Max(_healthPoints.value - damage, 0);
@@ -79,29 +102,6 @@ namespace RPG.Attributes
             _healthPoints.value = Mathf.Min(_healthPoints.value + healthToRestore, GetMaxHealthPoints());
         }
 
-        private void Awake()
-        {
-            _healthPoints = new LazyValue<float>(GetInitialHealth);
-            _baseStats = GetComponent<BaseStats>();
-            _animator = GetComponent<Animator>();
-            _actionScheduler = GetComponent<ActionScheduler>();
-        }
-
-        private void Start()
-        {
-            _healthPoints.ForceInit();
-        }
-
-        private void OnEnable()
-        {
-            _baseStats.OnLevelUp += RegenerateHealth;
-        }
-
-        private void OnDisable()
-        {
-            _baseStats.OnLevelUp -= RegenerateHealth;
-        }
-
         private float GetInitialHealth()
         {
             return _baseStats.GetStat(Stat.Health);
@@ -113,7 +113,7 @@ namespace RPG.Attributes
                 return;
 
             _isDead = true;
-            _animator.SetTrigger("die");
+            _animator.SetTrigger(AnimatorCharacterManager.Instance.Params.Die);
             _actionScheduler.CancelCurrentAction();
         }
 

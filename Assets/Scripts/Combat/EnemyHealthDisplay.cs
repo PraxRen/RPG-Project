@@ -1,5 +1,6 @@
 using RPG.Attributes;
 using RPG.Combat;
+using RPG.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,14 @@ namespace RPG.Combat
 {
     public class EnemyHealthDisplay : MonoBehaviour
     {
-        [SerializeField] private Fighter _fighter;
         [SerializeField] private Text _text;
+
+        private Fighter _fighter;
+
+        private void Start()
+        {
+            _fighter = PersistentObjects.Instance.Player.GetComponent<Fighter>();
+        }
 
         private void Update()
         {
