@@ -325,6 +325,8 @@ GameObject:
   - component: {fileID: 7131725728260582273}
   - component: {fileID: 1725932475504937105}
   - component: {fileID: 7389118888795355500}
+  - component: {fileID: 7981111702879831937}
+  - component: {fileID: 792605982526395299}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -429,6 +431,7 @@ MonoBehaviour:
   _rightHandTransform: {fileID: 0}
   _leftHandTransform: {fileID: 0}
   _defaultWeaponConfig: {fileID: 11400000, guid: 90feb7f7bcf43794992f62e2f62ecdca, type: 2}
+  _equipment: {fileID: 7981111702879831937}
 --- !u!114 &372354543083334083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,6 +517,33 @@ MonoBehaviour:
   _progression: {fileID: 11400000, guid: 003297b6f5e92fd489f48e9546535c7f, type: 2}
   _levelUpParticleEffect: {fileID: 0}
   _shouldUseModifiers: 0
+--- !u!114 &7981111702879831937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8258863346343841869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f3ac9e25624cee49b27dfe8da896620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &792605982526395299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8258863346343841869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a142a64eca15334288117d7d3e80e03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scatterDistance: 1
+  _dropLibrary: []
+  _numberOfDrops: 2
 --- !u!1001 &8830877268479786282
 PrefabInstance:
   m_ObjectHideFlags: 0

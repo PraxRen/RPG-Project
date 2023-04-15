@@ -1,5 +1,7 @@
 using RPG.Attributes;
 using RPG.Core;
+using RPG.Inventories;
+using RPG.Stats;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,8 +9,8 @@ using UnityEngine;
 
 namespace RPG.Combat
 {
-    [CreateAssetMenu(fileName = "Weapon", menuName = "Weapon/Make New Weapon", order = 0)]
-    public class WeaponConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "Weapon", menuName = "RPG/Weapon/Weapon Config", order = 0)]
+    public class WeaponConfig : EquipableItem, IModifierProvider
     {
         [SerializeField] private AnimatorOverrideController _animatorOverride = null;
         [SerializeField] private Weapon _equippedPrefab = null;
@@ -97,6 +99,23 @@ namespace RPG.Combat
                 handTransfoem = leftHand;
 
             return handTransfoem;
+        }
+
+        public IEnumerable<float> GetAdditiveModifiers(Stat stat)
+        {
+            if (stat == Stat.Damage)
+            {
+                yield return _weaponDamage;
+            }
+        }
+
+        public IEnumerable<float> GetPercentageModifiers(Stat stat)
+        {
+            if (stat == Stat.Damage)
+            {
+                yield return _percentageBonus;
+            }
+
         }
     }
 }

@@ -141,6 +141,42 @@ PrefabInstance:
       propertyPath: uniqueIdentifier
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 792605982526395299, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _dropLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 50a218af606bd2048afb1193283ed8d3, type: 2}
+    - target: {fileID: 792605982526395299, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _numberOfDrops
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 792605982526395299, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _dropLibrary.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 792605982526395299, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _dropLibrary.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3db819c546008a34cb830efd662609b9, type: 2}
+    - target: {fileID: 792605982526395299, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _dropLibrary.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2fa2730ef0411e740baf2346b2168b28, type: 2}
+    - target: {fileID: 792605982526395299, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _dropLibrary.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: e8b9c1e7caf02be4296bf9943a9ac824, type: 2}
+    - target: {fileID: 792605982526395299, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _dropLibrary.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: eb4ea81cfdbd3574e9f8892e3f7e9db2, type: 2}
+    - target: {fileID: 792605982526395299, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _dropLibrary.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: e084b90647286524aa9ad8ec8a4c9354, type: 2}
+    - target: {fileID: 792605982526395299, guid: 8d528b37540242941ac78fa03738537b, type: 3}
+      propertyPath: _dropLibrary.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: e3a52d0f5fa833643a2a2f024d9fff1b, type: 2}
     - target: {fileID: 6394452364653814769, guid: 8d528b37540242941ac78fa03738537b, type: 3}
       propertyPath: m_RootOrder
       value: 2

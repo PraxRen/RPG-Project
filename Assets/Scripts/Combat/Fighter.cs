@@ -1,4 +1,4 @@
-using GameDevTV.Utils;
+using RPG.Utils;
 using RPG.Attributes;
 using RPG.Core;
 using RPG.Movement;
@@ -6,17 +6,20 @@ using RPG.Saving;
 using RPG.Stats;
 using System.Collections.Generic;
 using UnityEngine;
+using RPG.Inventories;
+using System;
 
 namespace RPG.Combat
 {
     [RequireComponent(typeof(Mover), typeof(Animator), typeof(BaseStats))]
     [RequireComponent(typeof(ActionScheduler))]
-    public class Fighter : MonoBehaviour, IAction, ISaveable, IModifierProvider
+    public class Fighter : MonoBehaviour, IAction, ISaveable
     {
         [SerializeField] private float _timeBetweenAttack = 1f;
         [SerializeField] private Transform _rightHandTransform = null;
         [SerializeField] private Transform _leftHandTransform = null;
         [SerializeField] private WeaponConfig _defaultWeaponConfig = null;
+        [SerializeField] private Equipment _equipment;
 
         private Health _target;
         private Mover _mover;
@@ -36,7 +39,17 @@ namespace RPG.Combat
             _currentWeaponConfig = _defaultWeaponConfig;
             _currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
         }
-        
+
+        private void OnEnable()
+        {
+            _equipment.equipmentUpdated += UpdateWeapon;
+        }
+
+        private void OnDisable()
+        {
+            _equipment.equipmentUpdated += UpdateWeapon;
+        }
+
         private void Start()
         {
             _currentWeapon.ForceInit();
@@ -99,22 +112,6 @@ namespace RPG.Combat
             _mover.Cancel();
         }
 
-        public IEnumerable<float> GetAdditiveModifiers(Stat stat)
-        {
-            if (stat == Stat.Damage)
-            {
-                yield return _currentWeaponConfig.GetDamage();
-            }
-        }
-
-        public IEnumerable<float> GetPercentageModifiers(Stat stat)
-        {
-            if (stat == Stat.Damage)
-            {
-                yield return _currentWeaponConfig.GetPercentageBonus();
-            }
-        }
-
         public object CaptureState()
         {
             return _currentWeaponConfig.name;
@@ -125,6 +122,19 @@ namespace RPG.Combat
             string weaponName = (string)state;
             WeaponConfig weapon = Resources.Load<WeaponConfig>(weaponName);
             EquipWeapon(weapon);
+        }
+
+        private void UpdateWeapon()
+        {
+            WeaponConfig weaponConfig = _equipment.GetItemInSlot(EquipLocation.Weapon) as WeaponConfig;
+
+            if (weaponConfig == null)
+            {
+                EquipWeapon(_defaultWeaponConfig);
+                return;
+            }
+            
+            EquipWeapon(weaponConfig);
         }
 
         private Weapon SetupDefaultWeapon()

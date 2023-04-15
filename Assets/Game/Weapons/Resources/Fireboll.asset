@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a06cde601b503498fb6efec3614c13, type: 3}
   m_Name: Fireboll
   m_EditorClassIdentifier: 
+  itemID: 85c52634-a0cb-452e-ae3c-4a9c5e17ec06
+  displayName: Fireboll
+  description: 
+  icon: {fileID: 21300000, guid: a1ec2c0ddc0da634b85f0f465fec2d0d, type: 3}
+  pickup: {fileID: 7453876419922361179, guid: c4ec3bbf38d06e941b49aeb4f26cb632, type: 3}
+  stackable: 0
+  allowedEquipLocation: 5
   _animatorOverride: {fileID: 22100000, guid: 1befc8cce6c3ab1449673bf2c96387fa, type: 2}
   _equippedPrefab: {fileID: 0}
   _weaponDamage: 10
