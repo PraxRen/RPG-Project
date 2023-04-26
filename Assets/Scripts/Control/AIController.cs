@@ -39,7 +39,6 @@ namespace RPG.Control
             _health = GetComponent<Health>();
             _mover = GetComponent<Mover>();
             _actionScheduler = GetComponent<ActionScheduler>();
-            _player = PersistentObjects.Instance.Player;
             _guardPosition = new LazyValue<Vector3>(GetGuardPosition);
         }
 
@@ -55,6 +54,7 @@ namespace RPG.Control
 
         private void Start ()
         {
+            _player = PersistentObjects.Instance.Player;
             _guardPosition.ForceInit();
         }
 

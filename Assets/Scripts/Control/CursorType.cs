@@ -12,5 +12,6 @@ namespace RPG.Control
         UI,
         Pickup,
         FullPickup,
+        Dialogue,
     }
 }

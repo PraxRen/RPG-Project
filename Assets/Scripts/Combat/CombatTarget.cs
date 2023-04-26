@@ -16,6 +16,11 @@ namespace RPG.Combat
 
         public bool HandleRaycast(PlayerController callingController)
         {
+            if (!enabled)
+            {
+                return false;
+            }
+
             if (callingController.TryGetComponent(out Fighter fighter) == false)
             {
                 return false;
